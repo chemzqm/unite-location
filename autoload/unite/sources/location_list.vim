@@ -11,7 +11,11 @@ let s:source = {
 \  "hooks" : {},
 \}
 
-function! s:location_list_to_unite(val)
+function! s:source.hooks.on_init(args, context) abort
+  let a:context.source__bufname = bufname('%')
+endfunction
+
+function! s:location_list_to_unite(val) abort
   let bufnr = a:val.bufnr
   let fname = bufnr == 0 ? "" : bufname(bufnr)
   let line  = bufnr == 0 ? 0 : a:val.lnum
@@ -24,7 +28,7 @@ function! s:location_list_to_unite(val)
     let word = a:val.text
     let is_dummy = 1
   else
-    let word = pathshorten(fname) . '|' . line . ' col ' . col . ' ' . type .  '| ' . a:val.text
+    let word = fnamemodify(fname, ':t') . '|' . line . ' col ' . col . ' ' . type .  '| ' . a:val.text
     let is_dummy = 0
   endif
 
@@ -41,10 +45,10 @@ function! s:location_list_to_unite(val)
 \    }
 endfunction
 
-function! s:source.gather_candidates(args, context)
+function! s:source.gather_candidates(args, context) abort
 
   let unite = get(b:, "unite", {})
-  let winnr = get(unite, "prev_winnr", winnr())
+  let winnr = bufwinnr(a:context.source__bufname)
 
   let lolder = empty(a:args) ? 0 : a:args[0]
   if lolder == 0
@@ -59,7 +63,7 @@ function! s:source.gather_candidates(args, context)
   endif
 endfunction
 
-function! s:source.hooks.on_syntax(args, context)
+function! s:source.hooks.on_syntax(args, context) abort
   syntax case ignore
   syntax match uniteSource__LocationListHeader /\v^.*\|\d.*\|/
         \ containedin=uniteSource__LocationList
@@ -80,5 +84,6 @@ function! s:source.hooks.on_syntax(args, context)
 endfunction
 
 function! s:source.hooks.on_close(args, context)
+  let a:context.source__bufname = ''
 endfunction
 

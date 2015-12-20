@@ -40,7 +40,7 @@ Add these lines to `.vimrc`
 
     " should have unite
     Plugin 'Shougo/unite.vim'
-    Plugin 'chemzqm/unite-git-log'
+    Plugin 'chemzqm/unite-location'
 
 Then:
 

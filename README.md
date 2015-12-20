@@ -2,8 +2,6 @@
 
 Make unite replace quickfix list and lcoation list.
 
-Support `highlight`, `column jump`
-
 TODO: implementation of refresh
 
 ## Motivation

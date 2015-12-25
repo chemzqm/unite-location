@@ -59,7 +59,12 @@ function! s:source.hooks.on_syntax(args, context)
         \ containedin=uniteSource__QuickfixHeader
   syntax match uniteSource__QuickfixPosition /\v\|\zs.{-}\ze\|/ contained
         \ containedin=uniteSource__QuickfixHeader
-
+  if exists('g:grep_word')
+    let l:pattern = escape(g:grep_word, '\\/.*$^~[]')
+    execute 'syntax match uniteSource__QuickfixWord /'
+          \ . l:pattern . '/'
+  endif
+  highlight default link uniteSource__QuickfixWord Search
   highlight default link uniteSource__QuickfixName Identifier
   highlight default link uniteSource__QuickfixPosition LineNr
 

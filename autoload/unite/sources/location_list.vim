@@ -1,4 +1,6 @@
-scriptencoding utf-8
+let s:save_cpo = &cpo
+set cpo&vim
+
 
 function! unite#sources#location_list#define()
   return s:source
@@ -87,3 +89,5 @@ function! s:source.hooks.on_close(args, context)
   let a:context.source__bufname = ''
 endfunction
 
+let &cpo = s:save_cpo
+unlet s:save_cpo

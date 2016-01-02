@@ -1,4 +1,6 @@
-scriptencoding utf-8
+let s:save_cpo = &cpo
+set cpo&vim
+
 
 function! unite#sources#quickfix#define()
   return s:source
@@ -10,8 +12,6 @@ let s:source = {
 \  "syntax" : "uniteSource__Quickfix",
 \  "hooks" : {},
 \}
-
-" "converters" : "converter_quickfix_default"
 
 function! s:qflist_to_unite(val)
   let bufnr = a:val.bufnr
@@ -72,3 +72,6 @@ endfunction
 
 function! s:source.hooks.on_close(args, context)
 endfunction
+
+let &cpo = s:save_cpo
+unlet s:save_cpo

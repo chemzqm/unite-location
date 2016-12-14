@@ -1,0 +1,53 @@
+import re
+from .base import Base
+
+class Source(Base):
+
+  def __init__(self, vim):
+    super().__init__(vim)
+
+    self.syntax_name = 'deniteSource_Quickfix'
+    self.name = 'quickfix'
+    self.kind = 'file'
+    self.matchers = ['matcher_fuzzy']
+    self.sorters = []
+
+  def highlight_syntax(self):
+    super().highlight_syntax()
+    self.vim.command('syntax case ignore')
+    self.vim.command(r'syntax match deniteSource_QuickfixHeader /\v^.*\|\d.*\d\|/ containedin=deniteSource_Quickfix')
+    self.vim.command(r'syntax match deniteSource_QuickfixName /\v^[^|]+/ contained ' +
+                    r'containedin=deniteSource_QuickfixHeader')
+    self.vim.command(r'syntax match deniteSource_QuickfixPosition /\v\|\zs.{-}\ze\|/ contained ' +
+                    r'containedin=deniteSource_QuickfixHeader')
+    if self.vim.eval('exists("g:grep_word")'):
+      pattern = re.escape(self.vim.eval('g:grep_word'))
+      self.vim.command(r'syntax match deniteSource_QuickfixWord /' +pattern+ '/')
+    self.vim.command('highlight default link deniteSource_QuickfixWord Search')
+    self.vim.command('highlight default link deniteSource_QuickfixName Identifier')
+    self.vim.command('highlight default link deniteSource_QuickfixPosition LineNr')
+
+
+  def convert(self, val, context):
+    bufnr = val['bufnr']
+    line = val['lnum'] if bufnr != 0 else 0
+    col = val['col'] if bufnr != 0 else 0
+    fname = "" if bufnr == 0 else self.vim.eval('bufname(' + str(bufnr) + ')')
+    word = fname + '|' + str(line) + ' col ' + str(col) + '| ' + val['text']
+    return {
+        'word': word,
+        'action__path': fname,
+        'action__line': line,
+        'action__col': col,
+        'action__buffer_nr': bufnr,
+        }
+
+  def gather_candidates(self, context):
+    items = self.vim.eval('getqflist()')
+    res = []
+
+    for item in items:
+      if item['valid'] != 0:
+        res.append(self.convert(item, context))
+
+    return res

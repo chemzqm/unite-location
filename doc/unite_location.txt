@@ -4,51 +4,38 @@
 ==============================================================================
 Index						*unite-location-contents*
 
-INTRODUCTION			|unite-location-introduction|
-USAGE				|unite-location-usage|
+INTRODUCTION					|unite-location-introduction|
+USAGE						|unite-location-usage|
 
 
 ==============================================================================
 INTRODUCTION					*unite-location-introduction*
 
 
-|unite-location| is a |unite-source| for outputting |quickfix|
-(|location-list|) data to |unite.vim|, a plugin written by Shougo.
+|unite-location| is a |unite-source| and |denite-source| for outputting
+|quickfix| (|location-list|) data to |unite.vim| or |denite.nvim|, a plugin written
+by Shougo.
 
 unite.vim - github : https://github.com/Shougo/unite.vim
 
-It suports:
+denite.nvim - github : https://github.com/Shougo/denite.nvim
 
-- Use previous quickfix outputs with |:colder| and |:cnewer|
- - |unite-location-usage|
-
-- Show shortened file paths using |pathshorten()|
-
-- Outputs from location_list
- - :Unite location_list
 
 ==============================================================================
 USAGE						*unite-location-usage*
 
 Start |unite.vim| after sending outputs to |quickfix|.
 
->
-	" Use output to quickfix as source
-	:Unite quickfix
-	
-	" Use output to location-list as source
-	:Unite location_list
-	
-	" Use quickfix output prior to the current as source.
-	" Only the output to unite.vim is modified.
-	" Note that :colder is not actually executed.
-	:Unite quickfix:2
-	
-	" Behaviour similar to quickfix
-	" Open unite.vim at the bottom (-direction=botright),
-	" and don't quit unite.vim (-no-quit) after selecting candidate.
-	:Unite -no-quit -direction=botright quickfix
+:Unite quickfix
+:Denite quickfix
 
+	Open quickfix with unite or denite
+
+:Unite location_list
+:Denite location_lsit
+
+	Open location list with unite or denite
+>
 ==============================================================================
 
 vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl:noet

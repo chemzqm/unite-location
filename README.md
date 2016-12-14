@@ -1,35 +1,21 @@
 # Unite-location
 
-Make unite replace quickfix list and lcoation list.
+Make unite/denite replace quickfix list and lcoation list.
 
 TODO: implementation of refresh
 
 ## Motivation
 
-With [Unite](https://github.com/Shougo/unite.vim), I can do more actions (like filter, convertor), and they're uniformed, no need to remember more key mapping for navigate or list toggle, for example, you can add followinng mapping to make your life with list much easier:
+With [denite.nvim](https://github.com/Shougo/denite.nvim), I can do more actions (like filter, convertor),
+and they're uniformed, no need to remember more key mapping for navigate or list toggle, for example, you
+can add followinng mapping to make your life with list much easier:
 
 ``` VimL
-" Toggle Unite by `<space>u`
-function! s:ToggleUnite()
-  for i in range(1, winnr('$'))
-    let name = bufname(winbufnr(i))
-    if match(name, '^\[unite\]') == 0
-      UniteClose
-      return
-    endif
-  endfor
-  UniteResume
-endfunction
-
-nmap <silent> <space>u :call <SID>ToggleUnite()<cr>
-
-" Easily jump between candidates by `[count]<space>j` and `[count]<space>k`
-nmap <space>j :<C-u>call <SID>Jump(v:count1, 'Next')<cr>
-nmap <space>k :<C-u>call <SID>Jump(v:count1, 'Previous')<cr>
-
-function! s:Jump(count, dir)
-  execute a:count . 'Unite' . a:dir
-endfunction
+nnoremap <silent> <space>p  :<C-u>Denite -resume<CR>
+nnoremap <silent> <space>j  :call execute('Denite -resume -select=+'.v:count1.' -immediately')<CR>
+nnoremap <silent> <space>k  :call execute('Denite -resume -select=-'.v:count1.' -immediately')<CR>
+nnoremap <silent> <space>q  :<C-u>Denite -mode=normal -auto-resize quickfix<CR>
+nnoremap <silent> <space>l  :<C-u>Denite -mode=normal -auto-resize location_list<CR>
 ```
 
 ## Install
@@ -42,6 +28,10 @@ Add these lines to `.vimrc`
     Plugin 'Shougo/unite.vim'
     Plugin 'chemzqm/unite-location'
 
+Or use [denite.nvim](https://github.com/Shougo/denite.nvim)
+
+    Plugin 'Shougo/denite.nvim'
+
 Then:
 
     :so ~/.vimrc
@@ -52,9 +42,13 @@ Then:
 ``` VimL
 " show quickfix list
 :Unite quickfix
+" or
+:Denite quickfix
 
 " show location list
 :Unite location_list
+" or
+:Denite location_list
 ```
 
 ## license

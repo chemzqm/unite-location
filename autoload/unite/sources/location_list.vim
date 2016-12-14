@@ -26,7 +26,7 @@ function! s:location_list_to_unite(val) abort
   if a:val.type ==? 'e'
     let type = 'Error'
   endif
-  if !len(fname) || !v:val.valid
+  if !len(fname) || !a:val.valid
     let word = a:val.text
     let is_dummy = 1
   else
@@ -49,7 +49,6 @@ endfunction
 
 function! s:source.gather_candidates(args, context) abort
 
-  let unite = get(b:, "unite", {})
   let winnr = bufwinnr(a:context.source__bufname)
 
   let lolder = empty(a:args) ? 0 : a:args[0]

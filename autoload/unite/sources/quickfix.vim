@@ -67,7 +67,12 @@ function! s:source.hooks.on_syntax(args, context)
   highlight default link uniteSource__QuickfixWord Search
   highlight default link uniteSource__QuickfixName Identifier
   highlight default link uniteSource__QuickfixPosition LineNr
+  if exists('g:grep_command')
+    let b:status_string = g:grep_command
+  endif
+endfunction
 
+function! s:source.hooks.on_init(args, context)
 endfunction
 
 function! s:source.hooks.on_close(args, context)

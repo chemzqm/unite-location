@@ -6,16 +6,14 @@ class Source(Base):
   def __init__(self, vim):
     super().__init__(vim)
 
-    self.syntax_name = 'deniteSource_Quickfix'
     self.name = 'quickfix'
     self.kind = 'file'
     self.matchers = ['matcher_fuzzy']
     self.sorters = []
 
-  def highlight_syntax(self):
-    super().highlight_syntax()
+  def define_syntax(self):
     self.vim.command('syntax case ignore')
-    self.vim.command(r'syntax match deniteSource_QuickfixHeader /\v^.*\|\d.*\d\|/ containedin=deniteSource_Quickfix')
+    self.vim.command(r'syntax match deniteSource_QuickfixHeader /\v^.*\|\d.*\d\|/ containedin=' + self.syntax_name)
     self.vim.command(r'syntax match deniteSource_QuickfixName /\v^[^|]+/ contained ' +
                     r'containedin=deniteSource_QuickfixHeader')
     self.vim.command(r'syntax match deniteSource_QuickfixPosition /\v\|\zs.{-}\ze\|/ contained ' +
@@ -23,6 +21,8 @@ class Source(Base):
     if self.vim.eval('exists("g:grep_word")'):
       pattern = re.escape(self.vim.eval('g:grep_word'))
       self.vim.command(r'syntax match deniteSource_QuickfixWord /' +pattern+ '/')
+
+  def highlight(self):
     self.vim.command('highlight default link deniteSource_QuickfixWord Search')
     self.vim.command('highlight default link deniteSource_QuickfixName Identifier')
     self.vim.command('highlight default link deniteSource_QuickfixPosition LineNr')

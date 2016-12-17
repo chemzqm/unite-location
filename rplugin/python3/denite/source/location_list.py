@@ -6,7 +6,6 @@ class Source(Base):
   def __init__(self, vim):
     super().__init__(vim)
 
-    self.syntax_name = 'deniteSource_location'
     self.name = 'location_list'
     self.kind = 'file'
     self.matchers = ['matcher_regexp']
@@ -18,22 +17,22 @@ class Source(Base):
     context['__bufnr'] = self.vim.current.buffer.number
     context['__filename'] = os.path.basename(context['__bufname'])
 
-  def highlight_syntax(self):
-    super().highlight_syntax()
+  def define_syntax(self):
     self.vim.command('syntax case ignore')
     self.vim.command(r'syntax match deniteSource__LocationListHeader ' +
-                    r'/\v^.*\|\d.{-}\|/ containedin=deniteSource_location')
+                    r'/\v^.*\|\d.{-}\|/ containedin=' + self.syntax_name)
     self.vim.command(r'syntax match deniteSource__LocationListName ' +
                     r'/\v^[^|]+/ contained containedin=deniteSource__LocationListHeader')
     self.vim.command(r'syntax match deniteSource__LocationListPosition ' +
                     r'/\v\|\zs.{-}\ze\|/ contained containedin=deniteSource__LocationListHeader')
     self.vim.command(r'syntax match deniteSource__LocationListError /\vError/ contained containedin=deniteSource__LocationListPosition')
     self.vim.command(r'syntax match deniteSource__LocationListWarning /\vWarning/ contained containedin=deniteSource__LocationListPosition')
-    self.vim.command('highlight default link deniteSource__LocationListWarning Statement')
+
+  def highlight(self):
+    self.vim.command('highlight default link deniteSource__LocationListWarning Comment')
     self.vim.command('highlight default link deniteSource__LocationListError Error')
     self.vim.command('highlight default link deniteSource__LocationListName Identifier')
     self.vim.command('highlight default link deniteSource__LocationListPosition LineNr')
-
 
   def convert(self, val, context):
     type_str = 'Error' if val['type'].lower() == 'e' else 'Warning'

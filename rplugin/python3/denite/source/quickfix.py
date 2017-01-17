@@ -18,6 +18,7 @@ class Source(Base):
                     r'containedin=deniteSource_QuickfixHeader')
     self.vim.command(r'syntax match deniteSource_QuickfixPosition /\v\|\zs.{-}\ze\|/ contained ' +
                     r'containedin=deniteSource_QuickfixHeader')
+
     word = self.vim.eval('get(g:,"grep_word", "")')
     if word:
       pattern = re.escape(word)

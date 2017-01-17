@@ -18,8 +18,9 @@ class Source(Base):
                     r'containedin=deniteSource_QuickfixHeader')
     self.vim.command(r'syntax match deniteSource_QuickfixPosition /\v\|\zs.{-}\ze\|/ contained ' +
                     r'containedin=deniteSource_QuickfixHeader')
-    if self.vim.eval('exists("g:grep_word")'):
-      pattern = re.escape(self.vim.eval('g:grep_word'))
+    word = self.vim.eval('get(g:,"grep_word", "")')
+    if word:
+      pattern = re.escape(word)
       self.vim.command(r'syntax match deniteSource_QuickfixWord /' +pattern+ '/')
 
   def highlight(self):

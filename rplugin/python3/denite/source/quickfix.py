@@ -26,7 +26,7 @@ class Source(Base):
 
   def highlight(self):
     self.vim.command('highlight default link deniteSource_QuickfixWord Search')
-    self.vim.command('highlight default link deniteSource_QuickfixName Identifier')
+    self.vim.command('highlight default link deniteSource_QuickfixName Directory')
     self.vim.command('highlight default link deniteSource_QuickfixPosition LineNr')
 
 

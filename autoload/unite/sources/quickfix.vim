@@ -1,7 +1,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-
 function! unite#sources#quickfix#define()
   return s:source
 endfunction
